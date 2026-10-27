@@ -1,6 +1,5 @@
-import { Home, Search, Library, Download } from 'lucide-react';
+import { Home, Search, Library } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { usePWAInstall } from '../hooks/usePWAInstall';
 
 interface SidebarProps {
   activeTab: 'home' | 'search' | 'library';
@@ -13,12 +12,6 @@ const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
     { id: 'search', name: 'Search', icon: Search },
     { id: 'library', name: 'Your Library', icon: Library },
   ] as const;
-
-  const { isAppInstalled, install } = usePWAInstall();
-
-  const handleManualInstall = () => {
-    install();
-  };
 
   return (
     <aside className="w-64 bg-black p-4 hidden md:flex flex-col gap-6 justify-between">
@@ -47,16 +40,6 @@ const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
           })}
         </nav>
       </div>
-      
-      {isAppInstalled ? null : (
-        <button 
-          onClick={handleManualInstall}
-          className="flex items-center gap-3 text-gray-400 hover:text-white px-4 py-2 transition-colors text-sm font-bold rounded-full"
-        >
-          <Download size={20} />
-          <span>Install App</span>
-        </button>
-      )}
     </aside>
   );
 };

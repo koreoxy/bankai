@@ -4,15 +4,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePWAInstall } from '../hooks/usePWAInstall';
 
 export const PWAStatusBanner = () => {
-  const { deferredPrompt, isAppInstalled, install } = usePWAInstall();
+  const { deferredPrompt, isAppInstalled, isIOS, install } = usePWAInstall();
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
 
   useEffect(() => {
-    if (deferredPrompt && !isAppInstalled) {
+    if ((deferredPrompt && !isAppInstalled) || (isIOS && !isAppInstalled && !(window as any).navigator.standalone)) {
       setShowInstallPrompt(true);
     }
-  }, [deferredPrompt, isAppInstalled]);
+  }, [deferredPrompt, isAppInstalled, isIOS]);
 
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
@@ -63,13 +63,35 @@ export const PWAStatusBanner = () => {
               <p className="text-xs text-[#b3b3b3]">Akses offline cepat via Desktop / Layar Utama HP.</p>
             </div>
             <div className="flex items-center gap-2">
-              <button
-                onClick={handleInstall}
-                className="bg-white hover:bg-gray-200 text-black px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-1"
-              >
-                <Download size={12} />
-                Install
-              </button>
+              {isIOS ? (
+                <button
+                  onClick={() => {
+                    // Show iOS instructions or native share
+                    setShowInstallPrompt(false);
+                    if (window.navigator.share) {
+                      window.navigator.share({
+                        title: 'Bankai',
+                        url: window.location.href,
+                      }).catch(() => {});
+                    } else {
+                      // Show instructions
+                      alert('Untuk menginstal di iOS: klik ikon share, lalu "Tambah ke Layar Utama"');
+                    }
+                  }}
+                  className="bg-white hover:bg-gray-200 text-black px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-1"
+                >
+                  <Download size={12} />
+                  Add to Home
+                </button>
+              ) : (
+                <button
+                  onClick={handleInstall}
+                  className="bg-white hover:bg-gray-200 text-black px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-1"
+                >
+                  <Download size={12} />
+                  Install
+                </button>
+              )}
               <button
                 onClick={() => setShowInstallPrompt(false)}
                 className="text-[#b3b3b3] hover:text-white p-1 rounded-full transition-colors"
