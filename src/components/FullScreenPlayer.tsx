@@ -1,6 +1,5 @@
 import { 
-  Play, Pause, Heart, SkipForward, SkipBack, Shuffle, Repeat, Volume2, VolumeX,
-  ChevronDown, ListMusic, MoreHorizontal
+  Play, Pause, Heart, SkipForward, SkipBack, Shuffle, Repeat, Volume2, VolumeX
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAudio } from '../store/AudioContext';
@@ -40,148 +39,149 @@ const FullScreenPlayer = ({ isOpen, onClose }: FullScreenPlayerProps) => {
           animate={{ y: 0 }}
           exit={{ y: '100%' }}
           transition={{ type: 'spring', damping: 28, stiffness: 260 }}
-          className="fixed inset-0 bg-black z-[60] flex flex-col overflow-hidden"
+          className="fixed inset-0 bg-[#121316] z-[60] flex flex-col overflow-hidden scanline"
         >
-          {/* Header */}
-          <div className="flex items-center justify-between p-5 flex-shrink-0">
+          {/* Header / Window Title Bar */}
+          <div className="flex items-center justify-between p-3 flex-shrink-0 window-title-bar-active border-b-2 border-[#0A0A0C]">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-sm tracking-widest text-black">WIN_PLAYER.EXE</span>
+              <AudioVisualizer isPlaying={isPlaying} />
+            </div>
             <motion.button
               whileTap={{ scale: 0.85 }}
               onClick={onClose}
-              className="text-gray-400 hover:text-white transition-colors"
+              className="btn-retro btn-retro-accent py-0.5 px-2 text-xs"
             >
-              <ChevronDown size={28} />
-            </motion.button>
-            <div className="flex items-center gap-2">
-              <span className="text-white font-semibold text-xs tracking-widest uppercase">Now Playing</span>
-              <AudioVisualizer isPlaying={isPlaying} />
-            </div>
-            <motion.button whileTap={{ scale: 0.85 }} className="text-gray-400 hover:text-white transition-colors">
-              <MoreHorizontal size={24} />
+              [X]
             </motion.button>
           </div>
 
-          {/* Album Art */}
-          <div className="flex justify-center px-8 mt-4 mb-8 flex-shrink-0">
-            <motion.div
-              initial={{ scale: 0.85, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.1 }}
-              className="w-full max-w-xs aspect-square rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.5)]"
-            >
+          {/* Main Container */}
+          <div className="flex-1 overflow-y-auto p-6 flex flex-col items-center justify-center max-w-lg mx-auto w-full">
+            {/* Album Art CRT Screen */}
+            <div className="w-full aspect-square bevel-inset p-2 mb-6 relative">
               {currentTrack.cover ? (
                 <img src={currentTrack.cover} alt="cover" className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gray-800">
-                  <Play size={64} className="text-gray-600" />
+                <div className="w-full h-full flex items-center justify-center bg-[#0A0A0C]">
+                  <Play size={64} className="text-[#3A3D45]" />
                 </div>
               )}
-            </motion.div>
-          </div>
-
-          {/* Info + Like */}
-          <div className="flex items-center justify-between px-8 mb-4">
-            <div className="min-w-0">
-              <motion.h2
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="text-white font-bold text-xl truncate"
-              >
-                {currentTrack.title}
-              </motion.h2>
-              <motion.p
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.05 }}
-                className="text-gray-400 text-sm truncate mt-0.5"
-              >
-                {currentTrack.artist}
-              </motion.p>
             </div>
-            <motion.button 
-              whileTap={{ scale: 0.8 }}
-              onClick={toggleLike}
-              className="text-gray-400 hover:text-accent ml-4 transition-colors"
-            >
-              <Heart size={26} className={`text-red-500 ${currentTrack.liked ? 'fill-red-500' : ''}`} />
-            </motion.button>
-          </div>
 
-          {/* Progress Bar */}
-          <div className="px-8 mb-4">
-            <input
-              type="range"
-              min={0}
-              max={duration || 100}
-              value={progress}
-              onChange={(e) => seek(Number(e.target.value))}
-              className="w-full accent-accent cursor-pointer h-1"
-            />
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
-              <span>{fmt(progress)}</span>
-              <span>{fmt(duration)}</span>
+            {/* Info + Like */}
+            <div className="w-full flex items-center justify-between bevel-raised p-4 mb-4">
+              <div className="min-w-0">
+                <motion.h2
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="text-[#FF7A59] font-bold text-xl truncate"
+                >
+                  {currentTrack.title}
+                </motion.h2>
+                <motion.p
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.05 }}
+                  className="text-[#8A909A] text-sm truncate mt-0.5 font-mono"
+                >
+                  {currentTrack.artist}
+                </motion.p>
+              </div>
+              <motion.button 
+                whileTap={{ scale: 0.8 }}
+                onClick={toggleLike}
+                className="btn-retro p-2"
+              >
+                <Heart size={20} className={currentTrack.liked ? 'fill-[#FF499E] text-[#FF499E]' : 'text-[#8A909A]'} />
+              </motion.button>
             </div>
-          </div>
 
-          {/* Main Controls */}
-          <div className="flex items-center justify-center gap-6 px-8 mb-6">
-            <motion.button
-              whileTap={{ scale: 0.85 }}
-              onClick={() => dispatch({ type: 'TOGGLE_SHUFFLE' })}
-              className={`transition-colors ${isShuffle ? 'text-accent' : 'text-gray-400 hover:text-white'}`}
-            >
-              <Shuffle size={22} />
-            </motion.button>
+            {/* Progress Bar Inset */}
+            <div className="w-full bevel-inset p-3 mb-6">
+              <input
+                type="range"
+                min={0}
+                max={duration || 100}
+                value={progress}
+                onChange={(e) => seek(Number(e.target.value))}
+                className="w-full accent-[#FF7A59] cursor-pointer h-2 bg-transparent"
+              />
+              <div className="flex justify-between text-xs text-[#8A909A] mt-2 font-mono">
+                <span>{fmt(progress)}</span>
+                <span>{fmt(duration)}</span>
+              </div>
+            </div>
 
-            <motion.button whileTap={{ scale: 0.85 }} whileHover={{ scale: 1.05 }} onClick={prev} className="text-white">
-              <SkipBack size={34} fill="white" />
-            </motion.button>
+            {/* Main Controls Bevel */}
+            <div className="flex items-center justify-center gap-4 bevel-raised p-4 w-full mb-6">
+              <motion.button
+                whileTap={{ scale: 0.85 }}
+                onClick={() => dispatch({ type: 'TOGGLE_SHUFFLE' })}
+                className={`btn-retro ${isShuffle ? 'btn-retro-accent' : ''}`}
+              >
+                <Shuffle size={18} />
+              </motion.button>
 
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              whileHover={{ scale: 1.08 }}
-              onClick={playPause}
-              className="bg-accent text-black rounded-full w-16 h-16 flex items-center justify-center shadow-[0_8px_24px_rgba(0,0,0,0.5)] ml-1"
-            >
-              {isPlaying ? <Pause size={30} fill="black" /> : <Play size={30} fill="black" />}
-            </motion.button>
+              <motion.button whileTap={{ scale: 0.85 }} onClick={prev} className="btn-retro">
+                <SkipBack size={18} />
+              </motion.button>
 
-            <motion.button whileTap={{ scale: 0.85 }} whileHover={{ scale: 1.05 }} onClick={next} className="text-white">
-              <SkipForward size={34} fill="white" />
-            </motion.button>
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={playPause}
+                className="btn-retro btn-retro-accent px-6 py-2 text-lg"
+              >
+                {isPlaying ? <Pause size={24} /> : <Play size={24} />}
+              </motion.button>
 
-            <motion.button
-              whileTap={{ scale: 0.85 }}
-              onClick={() =>
-                dispatch({
-                  type: 'SET_REPEAT_MODE',
-                  payload: repeatMode === 'off' ? 'all' : repeatMode === 'all' ? 'one' : 'off',
-                })
-              }
-              className={`transition-colors ${repeatMode !== 'off' ? 'text-accent' : 'text-gray-400 hover:text-white'}`}
-            >
-              <Repeat size={22} />
-            </motion.button>
-          </div>
+              <motion.button whileTap={{ scale: 0.85 }} onClick={next} className="btn-retro">
+                <SkipForward size={18} />
+              </motion.button>
 
-          {/* Volume */}
-          <div className="flex items-center gap-3 px-8">
-            <motion.button
-              whileTap={{ scale: 0.85 }}
-              onClick={() => dispatch({ type: 'SET_MUTED', payload: !isMuted })}
-              className="text-gray-400"
-            >
-              {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-            </motion.button>
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.01}
-              value={isMuted ? 0 : volume}
-              onChange={(e) => dispatch({ type: 'SET_VOLUME', payload: Number(e.target.value) })}
-              className="flex-1 accent-accent cursor-pointer h-1"
-            />
-            <ListMusic size={20} className="text-gray-400" />
+              <motion.button
+                whileTap={{ scale: 0.85 }}
+                onClick={() => {
+                  const nextMode = repeatMode === 'off' ? 'all' : repeatMode === 'all' ? 'one' : 'off';
+                  dispatch({ type: 'SET_REPEAT_MODE', payload: nextMode });
+                }}
+                className={`btn-retro ${repeatMode !== 'off' ? 'btn-retro-accent' : ''}`}
+              >
+                <Repeat size={18} />
+              </motion.button>
+            </div>
+
+            {/* Volume Control Bar */}
+            <div className="flex items-center gap-3 bevel-raised p-3 w-full">
+              <button
+                onClick={() => dispatch({ type: 'SET_MUTED', payload: !isMuted })}
+                className="btn-retro p-1"
+              >
+                {isMuted || volume === 0 ? (
+                  <VolumeX size={16} className="text-[#FF499E]" />
+                ) : (
+                  <Volume2 size={16} className="text-[#00D2FF]" />
+                )}
+              </button>
+              <button
+                onClick={() => dispatch({ type: 'SET_VOLUME', payload: Math.max(0, volume - 0.1) })}
+                className="btn-retro px-2 py-0.5 text-xs"
+              >
+                -
+              </button>
+              <div className="flex-1 bevel-inset h-3 relative overflow-hidden">
+                <div
+                  className="h-full bg-[#00D2FF]"
+                  style={{ width: `${isMuted ? 0 : volume * 100}%` }}
+                />
+              </div>
+              <button
+                onClick={() => dispatch({ type: 'SET_VOLUME', payload: Math.min(1, volume + 0.1) })}
+                className="btn-retro px-2 py-0.5 text-xs"
+              >
+                +
+              </button>
+            </div>
           </div>
         </motion.div>
       )}

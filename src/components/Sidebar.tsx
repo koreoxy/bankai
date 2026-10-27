@@ -15,13 +15,10 @@ const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
   ] as const;
 
   return (
-    <aside className="w-64 bg-black p-4 hidden md:flex flex-col gap-6 justify-between">
+    <aside className="w-64 p-4 hidden md:flex flex-col gap-6 window-frame bg-[#1E2025]">
       <div>
-        <div className="text-xl font-black text-white tracking-widest px-4 flex items-center gap-2 mb-6">
-          <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center">
-            <span className="text-black font-bold text-xs">B</span>
-          </div>
-          BANKAI
+        <div className="text-xl font-black text-[#FF7A59] tracking-widest px-4 flex items-center gap-2 mb-6">
+          BANKAI.OS
         </div>
         <nav className="flex flex-col gap-2">
           {menu.map((item) => {
@@ -30,11 +27,11 @@ const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
               <motion.button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
-                className={`flex items-center gap-4 px-4 py-2 rounded-lg text-sm font-bold transition-colors ${
-                  isActive ? 'text-white' : 'text-gray-400 hover:text-white'
+                className={`btn-retro w-full flex items-center gap-4 ${
+                  isActive ? 'btn-retro-accent' : ''
                 }`}
               >
-                <item.icon size={24} strokeWidth={isActive ? 3 : 2} />
+                <item.icon size={18} />
                 <span>{item.name}</span>
               </motion.button>
             );

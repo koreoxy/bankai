@@ -8,27 +8,27 @@ interface BottomNavProps {
 
 const BottomNav = ({ activeTab, setActiveTab }: BottomNavProps) => {
   const menu = [
-    { id: 'home', name: 'Home', icon: Home },
-    { id: 'search', name: 'Search', icon: Search },
-    { id: 'library', name: 'Library', icon: Library },
-    { id: 'liked', name: 'Liked', icon: Heart },
+    { id: 'home', name: 'HOME', icon: Home },
+    { id: 'search', name: 'SEARCH', icon: Search },
+    { id: 'library', name: 'LIB', icon: Library },
+    { id: 'liked', name: 'LIKED', icon: Heart },
   ] as const;
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[#1f1f1f] backdrop-blur border-t border-gray-900 flex justify-around py-2 z-50">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[#16171B] border-t-2 border-[#3A3D45] flex justify-around py-1.5 px-2 z-50">
       {menu.map((item) => {
         const isActive = activeTab === item.id;
         return (
           <motion.button
             key={item.id}
-            whileTap={{ scale: 0.9 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => setActiveTab(item.id)}
-            className={`flex flex-col items-center py-1 transition-colors ${
-              isActive ? 'text-white' : 'text-gray-400 hover:text-gray-300'
+            className={`btn-retro flex flex-col items-center justify-center py-1 px-3 flex-1 mx-0.5 ${
+              isActive ? 'btn-retro-accent' : ''
             }`}
           >
-            <item.icon size={20} className={isActive ? 'text-accent' : ''} />
-            <span className="text-[10px] font-medium mt-1">{item.name}</span>
+            <item.icon size={16} />
+            <span className="text-[10px] font-bold mt-0.5 leading-none">{item.name}</span>
           </motion.button>
         );
       })}

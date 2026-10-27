@@ -48,9 +48,9 @@ const ImportButton = () => {
   };
 
   return (
-    <label className="flex items-center gap-2 bg-[#1f1f1f] hover:bg-[#272727] text-white px-4 py-2 rounded-full cursor-pointer transition-colors text-sm font-semibold">
-      <Plus size={18} />
-      <span>Import</span>
+    <label className="btn-retro flex items-center gap-2 cursor-pointer select-none">
+      <Plus size={16} className="text-[#FF7A59]" />
+      <span>IMPORT.EXE</span>
       <input type="file" multiple accept="audio/*" className="hidden" onChange={handleImport} />
     </label>
   );

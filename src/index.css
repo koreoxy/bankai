@@ -1,54 +1,163 @@
 @import "tailwindcss";
 @import "@fontsource/geist-sans";
 @import "@fontsource/geist-mono";
+@import "@fontsource/vt323";
 
 :root {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #121316;
+  color: #F0F4F8;
+  --font-pixel: "VT323", monospace;
   --font-geist-sans: "Geist Sans", sans-serif;
   --font-geist-mono: "Geist Mono", monospace;
 }
 
 body {
   margin: 0;
-  font-family: var(--font-geist-sans);
+  font-family: var(--font-geist-mono);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #000000;
+  background-color: #121316;
 }
 
 @theme {
-  --color-background: #121212;
-  --color-surface: #181818;
-  --color-mid-surface: #1f1f1f;
-  --color-accent: #1ed760;
-  --color-text-base: #ffffff;
-  --color-text-secondary: #b3b3b3;
-  --color-border: #4d4d4d;
+  --color-background: #121316;
+  --color-surface: #1E2025;
+  --color-mid-surface: #16171B;
+  --color-accent: #FF7A59;
+  --color-text-base: #F0F4F8;
+  --color-text-secondary: #8A909A;
+  --color-border: #3A3D45;
+  --color-border-shadow: #0A0A0C;
+  --color-accent-pink: #FF499E;
+  --color-secondary-aqua: #00D2FF;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-pixel: var(--font-pixel);
 }
 
 h1, h2, h3, h4, .font-bold, .font-black {
-  font-family: var(--font-geist-sans);
+  font-family: var(--font-pixel);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
+.scanline {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.25) 50%,
+    rgba(0, 0, 0, 0.25)
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 10;
+  mix-blend-mode: multiply;
+}
+
+/* Retro raised bevel border (Level 1) */
+.bevel-raised {
+  border-top: 2px solid #3A3D45;
+  border-left: 2px solid #3A3D45;
+  border-bottom: 2px solid #0A0A0C;
+  border-right: 2px solid #0A0A0C;
+  background: #1E2025;
+  border-radius: 0;
+}
+
+/* Retro inset bevel border (Level 2) */
+.bevel-inset {
+  border-top: 2px solid #0A0A0C;
+  border-left: 2px solid #0A0A0C;
+  border-bottom: 2px solid #3A3D45;
+  border-right: 2px solid #3A3D45;
+  background: #0A0A0C;
+  border-radius: 0;
+}
+
+/* Window frame */
+.window-frame {
+  border-top: 2px solid #3A3D45;
+  border-left: 2px solid #3A3D45;
+  border-bottom: 2px solid #0A0A0C;
+  border-right: 2px solid #0A0A0C;
+  background: #1E2025;
+  border-radius: 0;
+  box-shadow: 4px 4px 0px #000000;
+}
+
+.window-title-bar-active {
+  background: #00D2FF;
+  color: #000000;
+}
+
+.window-title-bar-inactive {
+  background: #16171B;
+  color: #8A909A;
+}
+
+/* Retro button */
+.btn-retro {
+  border-top: 2px solid #3A3D45;
+  border-left: 2px solid #3A3D45;
+  border-bottom: 2px solid #0A0A0C;
+  border-right: 2px solid #0A0A0C;
+  background: #282B32;
+  color: #F0F4F8;
+  border-radius: 0;
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+  padding: 4px 12px;
+  transition: all 0.1s;
+}
+
+.btn-retro:active {
+  border-top: 2px solid #0A0A0C;
+  border-left: 2px solid #0A0A0C;
+  border-bottom: 2px solid #3A3D45;
+  border-right: 2px solid #3A3D45;
+  background: #0A0A0C;
+  transform: translate(1px, 1px);
+}
+
+.btn-retro-accent {
+  background: #FF7A59;
+  color: #000000;
+}
+
+.btn-retro-accent:active {
+  background: #FF8A70;
+}
+
+/* Scrollbar retro */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 14px;
+  height: 14px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #16171B;
+  border-left: 1px solid #3A3D45;
+  border-top: 1px solid #3A3D45;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #5a5a5a;
-  border-radius: 6px;
-  border: 3px solid transparent;
+  background: #3A3D45;
+  border-radius: 0;
+  border: 2px solid #0A0A0C;
   background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #b3b3b3;
-  background-clip: content-box;
+  background: #FF7A59;
 }

@@ -51,33 +51,33 @@ const AppContent = () => {
       <div
         key={track.id}
         onClick={() => dispatch({ type: 'SET_CURRENT_TRACK', payload: track })}
-        className={`flex items-center gap-4 px-4 py-3 rounded-lg cursor-pointer transition-colors ${
-          isCurrent ? 'bg-[#272727] text-accent' : 'hover:bg-[#272727] text-white'
+        className={`flex items-center gap-4 px-4 py-3 cursor-pointer bevel-raised ${
+          isCurrent ? 'bg-[#282B32]' : 'hover:bg-[#282B32]'
         }`}
       >
-        <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-[#1f1f1f] flex items-center justify-center">
+        <div className="w-12 h-12 bevel-inset flex-shrink-0 flex items-center justify-center">
           {track.cover ? (
             <img src={track.cover} alt="cover" className="w-full h-full object-cover" />
           ) : (
-            <Play size={20} className="text-gray-500" />
+            <Play size={20} className="text-[#8A909A]" />
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-sm truncate">{track.title}</p>
-          <p className="text-gray-400 text-xs truncate">{track.artist}</p>
+          <p className="font-bold text-sm truncate text-[#F0F4F8]">{track.title}</p>
+          <p className="text-[#8A909A] text-xs truncate">{track.artist}</p>
         </div>
         <button
           onClick={(e) => toggleLikeTrack(e, track)}
-          className="text-gray-400 hover:text-white p-2 transition-colors"
+          className="btn-retro"
         >
-          <Heart size={18} className={`text-red-500 ${track.liked ? 'fill-red-500' : ''}`} />
+          <Heart size={18} className={track.liked ? 'fill-[#FF499E] text-[#FF499E]' : ''} />
         </button>
       </div>
     );
   };
 
   return (
-    <div className="flex h-screen bg-black text-white overflow-hidden">
+    <div className="flex h-screen bg-[#121316] text-[#F0F4F8] overflow-hidden">
       {/* Desktop Sidebar */}
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
@@ -85,8 +85,8 @@ const AppContent = () => {
       <div className="flex-1 flex flex-col min-w-0 pb-28 md:pb-24">
         <PWAStatusBanner />
         {/* Header */}
-        <header className="h-16 px-6 flex items-center justify-between border-b border-gray-900 bg-black/60 backdrop-blur sticky top-0 z-30">
-          <span className="font-bold text-xl tracking-widest text-accent">Bankai</span>
+        <header className="h-16 px-6 flex items-center justify-between border-b-2 border-[#3A3D45] bg-[#1E2025] sticky top-0 z-30">
+          <span className="font-bold text-xl tracking-widest text-[#FF7A59]">BANKAI.OS</span>
           <ImportButton />
         </header>
 
@@ -101,10 +101,10 @@ const AppContent = () => {
           >
             {activeTab === 'home' && (
               <div>
-                <h1 className="text-3xl font-extrabold mb-6">Good day</h1>
+                <h1 className="text-3xl font-extrabold mb-6">WELCOME BACK</h1>
                 <div className="flex flex-col gap-2">
                   {playlist.length === 0 ? (
-                    <p className="text-gray-500">No tracks imported yet. Click "Import" in the top bar to add music files!</p>
+                    <p className="text-[#8A909A]">NO TRACKS IMPORTED. USE IMPORT.EXE</p>
                   ) : (
                     playlist.map(renderTrackItem)
                   )}
@@ -114,19 +114,19 @@ const AppContent = () => {
 
             {activeTab === 'search' && (
               <div>
-                <h1 className="text-3xl font-extrabold mb-6">Search</h1>
+                <h1 className="text-3xl font-extrabold mb-6">SEARCH</h1>
                 <div className="relative mb-6">
                   <input
                     type="text"
-                    placeholder="What do you want to listen to?"
+                    placeholder="Search track or artist..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full max-w-xl bg-[#1f1f1f] px-4 py-3 rounded-full text-sm outline-none focus:ring-2 focus:ring-accent"
+                    className="w-full max-w-xl bevel-inset px-4 py-3 text-sm outline-none focus:border-[#FF7A59] text-[#F0F4F8]"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
                   {filteredPlaylist.length === 0 ? (
-                    <p className="text-gray-500">No matching tracks found.</p>
+                    <p className="text-[#8A909A]">NO MATCHING TRACKS FOUND.</p>
                   ) : (
                     filteredPlaylist.map(renderTrackItem)
                   )}
@@ -136,10 +136,10 @@ const AppContent = () => {
 
             {activeTab === 'library' && (
               <div>
-                <h1 className="text-3xl font-extrabold mb-6">Your Library</h1>
+                <h1 className="text-3xl font-extrabold mb-6">YOUR LIBRARY</h1>
                 <div className="flex flex-col gap-2">
                   {playlist.length === 0 ? (
-                    <p className="text-gray-500">No imported music. Add local files to get started.</p>
+                    <p className="text-[#8A909A]">NO IMPORTED MUSIC. ADD LOCAL FILES.</p>
                   ) : (
                     playlist.map(renderTrackItem)
                   )}
@@ -149,10 +149,10 @@ const AppContent = () => {
             
             {activeTab === 'liked' && (
               <div>
-                <h1 className="text-3xl font-extrabold mb-6">Liked Songs</h1>
+                <h1 className="text-3xl font-extrabold mb-6">LIKED SONGS</h1>
                 <div className="flex flex-col gap-2">
                   {likedPlaylist.length === 0 ? (
-                    <p className="text-gray-500">No liked songs yet.</p>
+                    <p className="text-[#8A909A]">NO LIKED SONGS YET.</p>
                   ) : (
                     likedPlaylist.map(renderTrackItem)
                   )}

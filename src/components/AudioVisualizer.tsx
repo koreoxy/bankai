@@ -6,7 +6,8 @@ export const AudioVisualizer = ({ isPlaying }: { isPlaying: boolean }) => {
       {[0.4, 0.8, 0.5, 0.9].map((height, i) => (
         <motion.div
           key={i}
-          className="w-0.5 bg-accent rounded-full"
+          className="w-1 bg-[#FF7A59]"
+          style={{ borderRadius: 0 }}
           animate={
             isPlaying
               ? {
