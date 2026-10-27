@@ -4,6 +4,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAudio } from '../store/AudioContext';
+import { updateTrack } from '../lib/db';
 import { AudioVisualizer } from './AudioVisualizer';
 
 interface FullScreenPlayerProps {
@@ -17,6 +18,12 @@ const FullScreenPlayer = ({ isOpen, onClose }: FullScreenPlayerProps) => {
     progress, duration, seek, volume, isMuted, dispatch,
     isShuffle, repeatMode
   } = useAudio();
+
+  const toggleLike = async () => {
+    if (!currentTrack) return;
+    dispatch({ type: 'TOGGLE_LIKE', payload: currentTrack.id });
+    await updateTrack({ ...currentTrack, liked: !currentTrack.liked });
+  };
 
   const fmt = (s: number) => {
     if (!s || isNaN(s)) return '0:00';
@@ -90,8 +97,12 @@ const FullScreenPlayer = ({ isOpen, onClose }: FullScreenPlayerProps) => {
                 {currentTrack.artist}
               </motion.p>
             </div>
-            <motion.button whileTap={{ scale: 0.8 }} className="text-gray-400 hover:text-accent ml-4 transition-colors">
-              <Heart size={26} />
+            <motion.button 
+              whileTap={{ scale: 0.8 }}
+              onClick={toggleLike}
+              className="text-gray-400 hover:text-accent ml-4 transition-colors"
+            >
+              <Heart size={26} className={`text-red-500 ${currentTrack.liked ? 'fill-red-500' : ''}`} />
             </motion.button>
           </div>
 

@@ -1,9 +1,9 @@
-import { Home, Search, Library } from 'lucide-react';
+import { Home, Search, Library, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface BottomNavProps {
-  activeTab: 'home' | 'search' | 'library';
-  setActiveTab: (tab: 'home' | 'search' | 'library') => void;
+  activeTab: 'home' | 'search' | 'library' | 'liked';
+  setActiveTab: (tab: 'home' | 'search' | 'library' | 'liked') => void;
 }
 
 const BottomNav = ({ activeTab, setActiveTab }: BottomNavProps) => {
@@ -11,6 +11,7 @@ const BottomNav = ({ activeTab, setActiveTab }: BottomNavProps) => {
     { id: 'home', name: 'Home', icon: Home },
     { id: 'search', name: 'Search', icon: Search },
     { id: 'library', name: 'Library', icon: Library },
+    { id: 'liked', name: 'Liked', icon: Heart },
   ] as const;
 
   return (

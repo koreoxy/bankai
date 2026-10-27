@@ -1,6 +1,7 @@
 import { Play, Pause, Heart, SkipForward } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAudio } from '../store/AudioContext';
+import { updateTrack } from '../lib/db';
 import { AudioVisualizer } from './AudioVisualizer';
 
 interface MiniPlayerProps {
@@ -8,11 +9,18 @@ interface MiniPlayerProps {
 }
 
 const MiniPlayer = ({ onExpand }: MiniPlayerProps) => {
-  const { currentTrack, isPlaying, playPause, next, progress, duration } = useAudio();
+  const { currentTrack, isPlaying, playPause, next, progress, duration, dispatch } = useAudio();
 
   if (!currentTrack) return null;
 
   const pct = duration ? (progress / duration) * 100 : 0;
+
+  const toggleLike = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!currentTrack) return;
+    dispatch({ type: 'TOGGLE_LIKE', payload: currentTrack.id });
+    await updateTrack({ ...currentTrack, liked: !currentTrack.liked });
+  };
 
   return (
     <motion.div
@@ -49,8 +57,12 @@ const MiniPlayer = ({ onExpand }: MiniPlayerProps) => {
 
       {/* Controls */}
       <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
-        <motion.button whileTap={{ scale: 0.8 }} className="text-gray-400 hover:text-white p-1 hidden sm:block">
-          <Heart size={18} />
+        <motion.button 
+          whileTap={{ scale: 0.8 }} 
+          onClick={toggleLike}
+          className="text-gray-400 hover:text-white p-1 hidden sm:block"
+        >
+          <Heart size={18} className={`text-red-500 ${currentTrack.liked ? 'fill-red-500' : ''}`} />
         </motion.button>
         <motion.button 
           whileTap={{ scale: 0.85 }} 

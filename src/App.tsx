@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Play } from 'lucide-react';
+import { Play, Heart } from 'lucide-react';
 import { PWAStatusBanner } from './components/PWAStatusBanner';
 import Sidebar from './components/Sidebar';
 import BottomNav from './components/BottomNav';
@@ -9,10 +9,10 @@ import FullScreenPlayer from './components/FullScreenPlayer';
 import ImportButton from './components/ImportButton';
 import { AudioProvider, useAudio } from './store/AudioContext';
 import { useMediaSession } from './hooks/useMediaSession';
-import { getTracks } from './lib/db';
+import { getTracks, updateTrack } from './lib/db';
 
 const AppContent = () => {
-  const [activeTab, setActiveTab] = useState<'home' | 'search' | 'library'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'search' | 'library' | 'liked'>('home');
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -36,6 +36,14 @@ const AppContent = () => {
     track.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     track.artist.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  
+  const likedPlaylist = playlist.filter(track => track.liked);
+
+  const toggleLikeTrack = async (e: React.MouseEvent, track: any) => {
+    e.stopPropagation();
+    dispatch({ type: 'TOGGLE_LIKE', payload: track.id });
+    await updateTrack({ ...track, liked: !track.liked });
+  };
 
   const renderTrackItem = (track: any) => {
     const isCurrent = currentTrack?.id === track.id;
@@ -58,6 +66,12 @@ const AppContent = () => {
           <p className="font-semibold text-sm truncate">{track.title}</p>
           <p className="text-gray-400 text-xs truncate">{track.artist}</p>
         </div>
+        <button
+          onClick={(e) => toggleLikeTrack(e, track)}
+          className="text-gray-400 hover:text-white p-2 transition-colors"
+        >
+          <Heart size={18} className={`text-red-500 ${track.liked ? 'fill-red-500' : ''}`} />
+        </button>
       </div>
     );
   };
@@ -128,6 +142,19 @@ const AppContent = () => {
                     <p className="text-gray-500">No imported music. Add local files to get started.</p>
                   ) : (
                     playlist.map(renderTrackItem)
+                  )}
+                </div>
+              </div>
+            )}
+            
+            {activeTab === 'liked' && (
+              <div>
+                <h1 className="text-3xl font-extrabold mb-6">Liked Songs</h1>
+                <div className="flex flex-col gap-2">
+                  {likedPlaylist.length === 0 ? (
+                    <p className="text-gray-500">No liked songs yet.</p>
+                  ) : (
+                    likedPlaylist.map(renderTrackItem)
                   )}
                 </div>
               </div>

@@ -8,6 +8,7 @@ interface Track {
   cover?: string;
   url: string;
   duration: number;
+  liked?: boolean;
   blob?: Blob;
 }
 
@@ -37,7 +38,8 @@ type Action =
   | { type: 'NEXT_TRACK' }
   | { type: 'PREV_TRACK' }
   | { type: 'ADD_TRACK'; payload: Track }
-  | { type: 'REMOVE_TRACK'; payload: string };
+  | { type: 'REMOVE_TRACK'; payload: string }
+  | { type: 'TOGGLE_LIKE'; payload: string };
 
 const initialState: AudioState = {
   playlist: [],
@@ -118,6 +120,15 @@ function audioReducer(state: AudioState, action: Action): AudioState {
       return { ...state, playlist: [...state.playlist, action.payload] };
     case 'REMOVE_TRACK':
       return { ...state, playlist: state.playlist.filter(t => t.id !== action.payload) };
+    case 'TOGGLE_LIKE': {
+      const updatedPlaylist = state.playlist.map(t => 
+        t.id === action.payload ? { ...t, liked: !t.liked } : t
+      );
+      const updatedCurrentTrack = state.currentTrack?.id === action.payload 
+        ? { ...state.currentTrack, liked: !state.currentTrack.liked }
+        : state.currentTrack;
+      return { ...state, playlist: updatedPlaylist, currentTrack: updatedCurrentTrack };
+    }
     default:
       return state;
   }
@@ -145,7 +156,20 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
 
     const handleTimeUpdate = () => dispatch({ type: 'SET_PROGRESS', payload: audio.currentTime });
     const handleLoadedMetadata = () => dispatch({ type: 'SET_DURATION', payload: audio.duration });
-    const handleEnded = () => dispatch({ type: 'NEXT_TRACK' });
+    
+    const handleEnded = () => {
+      if (state.repeatMode === 'one') {
+        // Replay current track from beginning
+        audio.currentTime = 0;
+        if (state.isPlaying) {
+          audio.play().catch(console.error);
+        }
+        return;
+      }
+      // For 'all' or 'off', go to next track
+      dispatch({ type: 'NEXT_TRACK' });
+    };
+
     const handlePlay = () => dispatch({ type: 'SET_PLAYING', payload: true });
     const handlePause = () => dispatch({ type: 'SET_PLAYING', payload: false });
 
@@ -162,7 +186,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
       audio.removeEventListener('play', handlePlay);
       audio.removeEventListener('pause', handlePause);
     };
-  }, [state.volume, state.isMuted]);
+  }, [state.volume, state.isMuted, state.repeatMode, state.isPlaying]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -196,15 +220,15 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
   const prev = () => dispatch({ type: 'PREV_TRACK' });
 
   return (
-    <AudioContext.Provider value={{ 
+    <AudioContext.Provider value={ { 
       ...state, 
       dispatch, 
-      audioRef,
-      playPause,
-      seek,
-      next,
-      prev,
-    }}>
+      audioRef, 
+      playPause, 
+      seek, 
+      next, 
+      prev, 
+    }} >
       {children}
     </AudioContext.Provider>
   );

@@ -1,9 +1,9 @@
-import { Home, Search, Library } from 'lucide-react';
+import { Home, Search, Library, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface SidebarProps {
-  activeTab: 'home' | 'search' | 'library';
-  setActiveTab: (tab: 'home' | 'search' | 'library') => void;
+  activeTab: 'home' | 'search' | 'library' | 'liked';
+  setActiveTab: (tab: 'home' | 'search' | 'library' | 'liked') => void;
 }
 
 const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
@@ -11,6 +11,7 @@ const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
     { id: 'home', name: 'Home', icon: Home },
     { id: 'search', name: 'Search', icon: Search },
     { id: 'library', name: 'Your Library', icon: Library },
+    { id: 'liked', name: 'Liked Songs', icon: Heart },
   ] as const;
 
   return (
