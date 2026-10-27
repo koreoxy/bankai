@@ -1,10 +1,10 @@
 # BANKAI.OS // Retro PWA Music Player 📼
 
-Bankai adalah aplikasi pemutar musik modern bertema **Midnight Retro OS / Cyberpunk CRT** terinspirasi dari filosofi desain Poolsuite. Berjalan sepenuhnya secara lokal dan offline sebagai Progressive Web App (PWA).
+Bankai is a modern music player application featuring a **Midnight Retro OS / Cyberpunk CRT** aesthetic, inspired by the Poolsuite design philosophy. It runs entirely locally and offline as a Progressive Web App (PWA).
 
 ---
 
-## 📸 Preview Tampilan
+## 📸 UI Preview
 
 ### 🖥️ Desktop Version
 ![Desktop Version](screenshots/desktop-version.png)
@@ -16,14 +16,14 @@ Bankai adalah aplikasi pemutar musik modern bertema **Midnight Retro OS / Cyberp
 
 ---
 
-## ✨ Fitur Utama
+## ✨ Key Features
 
-- **Estetika Midnight Retro OS**: Desain antarmuka 80s/90s dengan *bevel 3D*, CRT scanline, pixel font (`VT323`), dan aksen palet *Cyber Neon Orange* (`#FF7A59`) serta *Electric Aqua* (`#00D2FF`).
-- **100% Offline & Lokal**: Simpan file audio secara lokal di peramban menggunakan IndexedDB via `idb`. Tanpa ketergantungan server atau internet.
-- **PWA Ready**: Dapat diinstal di desktop atau perangkat mobile dengan dialog retro installer kustom.
-- **Spotify-style Controls**: Kontrol volume cepat (`+` / `-` / Mute), toggle repeat, shuffle, scrubber slider dengan visualizer audio retro.
-- **Media Session API**: Terintegrasi langsung dengan kontrol media notifikasi sistem operasi / lockscreen ponsel.
-- **Ekstraksi Metadata Otomatis**: Membaca otomatis judul, artis, dan cover art dari metadata ID3 file MP3/FLAC/WAV lokal via `music-metadata-browser`.
+- **Midnight Retro OS Aesthetic**: 80s/90s UI design with 3D bevels, CRT scanlines, pixel font (`VT323`), and a high-contrast palette of *Cyber Neon Orange* (`#FF7A59`) and *Electric Aqua* (`#00D2FF`).
+- **100% Offline & Local**: Stores audio files locally in the browser using IndexedDB via `idb`. No server or internet dependency required.
+- **PWA Ready**: Installable on desktop or mobile devices with a custom retro installer dialog.
+- **Spotify-style Controls**: Quick volume control (`+` / `-` / Mute), toggle repeat, shuffle, and a scrubber slider with a retro audio visualizer.
+- **Media Session API**: Deeply integrated with OS system media controls and lockscreen.
+- **Automatic Metadata Extraction**: Automatically parses title, artist, and cover art from local MP3/FLAC/WAV files using `music-metadata-browser`.
 
 ---
 
@@ -33,59 +33,59 @@ Bankai adalah aplikasi pemutar musik modern bertema **Midnight Retro OS / Cyberp
 - **Bundler**: Vite 8 + `@vitejs/plugin-react`
 - **PWA**: `vite-plugin-pwa` + Workbox
 - **Styling**: Tailwind CSS v4 + `@fontsource/vt323` + `@fontsource/geist-mono`
-- **Animasi**: Framer Motion
-- **Database Lokal**: IndexedDB (`idb`)
+- **Animations**: Framer Motion
+- **Local DB**: IndexedDB (`idb`)
 - **Metadata Parser**: `music-metadata-browser`
 - **Icons**: Lucide React
 
 ---
 
-## 🚀 Memulai Proyek
+## 🚀 Getting Started
 
-### Prasyarat
+### Prerequisites
 - Node.js (v18+)
-- npm atau pnpm/yarn
+- npm, pnpm, or yarn
 
-### Instalasi & Menjalankan Dev Server
+### Installation & Development
 
 ```bash
-# Masuk ke direktori bankai
+# Enter the bankai directory
 cd bankai
 
 # Install dependencies
 npm install
 
-# Jalankan server pengembangan
+# Start the development server
 npm run dev
 ```
 
-Buka URL lokal yang muncul di terminal (biasanya `http://localhost:5173`).
+Open the local URL displayed in your terminal (usually `http://localhost:5173`).
 
-### Build untuk Produksi
+### Production Build
 
 ```bash
 npm run build
 ```
 
-Hasil build dan service worker PWA akan digenerate ke dalam folder `dist/`.
+The production assets and PWA service worker will be generated in the `dist/` folder.
 
 ---
 
-## 📁 Struktur Direktori
+## 📁 Directory Structure
 
 ```text
 bankai/
-├── public/              # Aset statis & manifest PWA
-├── screenshots/         # Dokumentasi tampilan UI (Desktop & Mobile)
+├── public/              # Static assets & PWA manifest
+├── screenshots/         # UI documentation (Desktop & Mobile)
 ├── src/
-│   ├── assets/          # Ikon & grafis tambahan
-│   ├── components/      # Komponen UI retro (Sidebar, MiniPlayer, FullScreenPlayer, dll)
-│   ├── hooks/           # Custom hook (usePWAInstall, useMediaSession)
-│   ├── lib/             # Konfigurasi IndexedDB lokal
+│   ├── assets/          # Icons & graphic assets
+│   ├── components/      # Retro UI components (Sidebar, MiniPlayer, FullScreenPlayer, etc.)
+│   ├── hooks/           # Custom hooks (usePWAInstall, useMediaSession)
+│   ├── lib/             # Local IndexedDB configuration
 │   ├── store/           # AudioContext & State Management
-│   ├── App.tsx          # Main View & routing state
-│   ├── index.css        # Bevel 3D, Scanline, & Styling Retro
-│   └── main.tsx         # Entry point aplikasi
+│   ├── App.tsx          # Main view & state routing
+│   ├── index.css        # 3D bevels, scanlines, & Retro styling
+│   └── main.tsx         # App entry point
 ├── package.json
 └── vite.config.ts
 ```
